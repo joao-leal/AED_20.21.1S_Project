@@ -23,7 +23,7 @@ char *CheckCall(int argc, char const *arg){
     
     for(p = len; i > 0; i--, p--)
     {
-        if( arg[p] != sufix[i] ) return -1;
+        if( arg[p] != sufix[i] ) exit(0);
     }   
 }
 

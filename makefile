@@ -1,21 +1,20 @@
 #   Compiler, Compiler Flags
 CC = gcc
-CFLAGS1 =-g -Wall 
+CFLAGS1 =-ggdb -Wall 
 CFLAGS2=-Wall -std=c99 -O3
 
 
 #   Sources
-SOURCES = aeroportos.c interfaces.c file.c
+SOURCES = backbone.c interfaces.c file.c
 
 #   Objects  ('Make' automatically compiles .c to .o)
-OBJECTS_A = aeroportos.o interfaces.o file.o
-
+OBJECTS_A = backbone.o interfaces.o file.o
 
 
 backbone: $(OBJECTS_A)
 	$(CC) $(CFLAGS1) -o $@ $(OBJECTS_A)
 	
-backbone.o: aeroportos.c defs.h interfaces.h file.h
+backbone.o: backbone.c defs.h interfaces.h file.h
 
 final :$(OBJECTS_A)
 	$(CC) $(CFLAGS2) -o $@ $(OBJECTS_A)
