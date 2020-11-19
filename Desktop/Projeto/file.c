@@ -4,19 +4,22 @@
 
 #include "file.h"
 
-int CheckCall(int argc, char const *arg){
+char *CheckCall(int argc, char const *arg){
 
     int len, i, p;
-    char sufix[9] = ".routes0";
+    char *sufix = NULL;
 
     if(argc != 2)
     {
         if(fprintf(stderr, "ERROR: Input file not given!\n"))
-        return -1;
+        exit(0);
     }
 
     len = strlen(arg);
-    i = strlen(sufix);
+    i = strlen(".routes0");
+
+    sufix = (char*) malloc(i * sizeof(char));
+    strcpy(sufix, ".routes0");
     
     for(p = len; i > 0; i--, p--)
     {

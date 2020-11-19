@@ -8,15 +8,27 @@
 
 int main(int argc, char const *argv[])
 {
-
-    CheckCall(argc, (char*) argv[1]);
-
     int i;
     Graph *G = NULL;
+    FILE *input, *output;
+    
+    input = fopen(CheckCall(argc, (char*) argv[1]), "r"); 
+    /*if the arguments are correct, CheckCall returns the name of the input file*/
+
+    
 
     G = GRAPHinit(5);
 
+
+    do
+    {
+        /* code */
+    } while (feof());
+    
+
     FreeGraph(G);
+
+
 
     return 0;
     
@@ -31,7 +43,7 @@ void modeA0()
 
 int B0(Graph *G, int v, int w)
 {
-    
+
     
 }
 
