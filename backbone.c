@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
     
     do
     {
-        int Apts, Rts,  v_i, v_j, origin, dest;
+        int Apts, Rts, v_i, v_j, origin, dest;
         double weight;
         char mode[3] = "";
 
