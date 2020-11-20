@@ -29,8 +29,14 @@ int main(int argc, char const *argv[])
             {
                 fscanf(input, "%d", &v_j);
             }
-            exit(0);
+            else exit(0);
         }
+
+        if(!strcmp(mode, "B0"))
+        {
+            fscanf(input, "%d", &v_j);
+        }
+
 
         fprintf(stdout, "%d %d %s %d", Apts, Rts, mode, v_i);
         if(!strcmp(mode, "B0")) fprintf(stdout, "%d", v_j);
