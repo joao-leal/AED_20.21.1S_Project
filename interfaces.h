@@ -35,7 +35,7 @@ Edge *EDGE(int, int, int);
 
 
 /*---------- Graph Interface --------- */
-Graph *GRAPHinit(int); 
+Graph *GRAPHinit(int, int); 
 void GRAPHinsertE(Graph *, Edge *);
 void GRAPHinsertValue(Graph *, int, int);
 void GRAPHinsertString(Graph *, char*, int);

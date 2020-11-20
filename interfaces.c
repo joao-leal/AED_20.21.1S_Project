@@ -49,7 +49,7 @@ Item LISTGetEl(list *ptr)
 
 
  /*---------------- Graph Interface ----------------*/
-Graph *GRAPHinit(int V)
+Graph *GRAPHinit(int V, int A)
 {
 
     Graph *G = NULL;
@@ -60,8 +60,8 @@ Graph *GRAPHinit(int V)
         if(G == NULL) exit(0);
 
         G->adj = NULL;
-        G->V = V; G->E = 0; 
-        G->adj = (list**) calloc(V, sizeof(struct _list*));
+        G->V = V; G->E = A; 
+        G->adj = calloc(V, sizeof(struct _list*));
         if(G->adj == NULL) fprintf(stderr, "Can't allocate Graph");
     }
     else
@@ -71,7 +71,8 @@ Graph *GRAPHinit(int V)
         G = (Graph*) calloc(1, sizeof(Graph));
         if(G == NULL) exit(0);
 
-        G->adj = (int**) calloc(V, sizeof(int *));
+        G->V = V; G->E = A; 
+        G->adj = calloc(V, sizeof(int *));
         for(i = 0;  i < V; i++)
         {
             G->adj[i] = (double*) calloc((i+1), sizeof(double));
@@ -96,7 +97,7 @@ void GRAPHinsertE(Graph *G, Edge *e)
         G->adj[v] = (list*) malloc(sizeof(struct _list));
 
 
-        if(G->adj[v] == NULL)fprintf(stderr, "ERROR: Couldn't allocate vertice");
+        if(G->adj[v] == NULL) exit(0);
 
         ptr = G->adj[v];
 

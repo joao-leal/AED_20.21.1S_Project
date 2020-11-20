@@ -15,23 +15,28 @@ int main(int argc, char const *argv[])
     /*if the arguments are correct, CheckCall returns the name of the input file*/
 
     
-
-    G = GRAPHinit(5);
-
     do
     {
-        int origin, dest;
+        int Apts, Rts,  v_i, v_j, origin, dest;
         double weight;
         char mode[3] = "";
 
+        Apts = Rts = v_i = v_j = origin = dest = 0;
 
-        if(fscanf(input, "%d %d %s %lf", &origin, &dest, mode, &weight) != 4) 
+        if(fscanf(input, "%d %d %s %d", &Apts, &Rts, mode, &v_i) != 4) 
         {
+            if(!strcmp(mode, "B0"))
+            {
+                fscanf(input, "%d", &v_j);
+            }
             exit(0);
         }
 
-        fprintf(stdin, "%d %d %s %lf\n", origin, dest, mode, weight);
+        fprintf(stdout, "%d %d %s %d", Apts, Rts, mode, v_i);
+        if(!strcmp(mode, "B0")) fprintf(stdout, "%d", v_j);
+        else fprintf(stdout, "\n");
 
+        G = GRAPHinit(Apts, Rts);
 
         switch (mode[0])
         {
@@ -72,7 +77,6 @@ int main(int argc, char const *argv[])
 
     FreeGraph(G);
     fclose(input);
-    free(input);
 
 
 

@@ -17,32 +17,32 @@ FILE *CheckCall(int argc, char const *arg){
     }
 
     len = strlen(arg);
-    printf("%d\n", len);
     
     i = strlen(".routes0");
     sufix = (char*) calloc(i+2, sizeof(char));
     strcpy(sufix, ".routes0");
     sufix[i+1] = '\0';
-    printf("%d\n", i);
 
     name = (char*) calloc((len-i+1), sizeof(char));
-    strncpy(name, arg, len-i+1);
-    name[len-i+1] = '\0';
+    strncpy(name, arg, len-i);
+    name[len-i] = '\0';
 
     printf("%s\n", name);
 
     
-    for(p = len; i+2 > 0; i--, p--)
+    for(p = len; i >= 0; i--, p--)
     {
-        printf("%c %c\n", arg[p-1], sufix[i-1]);
-        if( arg[p-1] != sufix[i-1] )
+        if( arg[p] != sufix[i] )
         {
             free(name);
             exit(0);  
         } 
     }   
 
-    input = fopen(name, "r");
+    input = fopen(arg, "r");
+
+    free(name);
+    free(sufix);
 
 
     return input;
