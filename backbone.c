@@ -8,11 +8,10 @@
 
 int main(int argc, char const *argv[])
 {
-    int i;
     Graph *G = NULL;
     FILE *input, *output;
     
-    input = fopen(CheckCall(argc, (char*) argv[1]), "r"); 
+    input = CheckCall(argc, (char*) argv[1]); 
     /*if the arguments are correct, CheckCall returns the name of the input file*/
 
     
@@ -26,11 +25,13 @@ int main(int argc, char const *argv[])
         char mode[3] = "";
 
 
-        if(fscanf(input, "%d %d %s %f", &origin, &dest, mode, &weight) != 4) 
+        if(fscanf(input, "%d %d %s %lf", &origin, &dest, mode, &weight) != 4) 
         {
-            fprintf(stdin, "%d %d %s %f\n", origin, dest, mode, weight);
             exit(0);
         }
+
+        fprintf(stdin, "%d %d %s %lf\n", origin, dest, mode, weight);
+
 
         switch (mode[0])
         {
@@ -70,6 +71,8 @@ int main(int argc, char const *argv[])
     
 
     FreeGraph(G);
+    fclose(input);
+    free(input);
 
 
 
@@ -87,7 +90,7 @@ void A0()
 int B0(Graph *G, int v, int w)
 {
 
-    
+   return 0; 
 }
 
 void C0(){

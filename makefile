@@ -1,6 +1,6 @@
 #   Compiler, Compiler Flags
 CC = gcc
-CFLAGS1 =-ggdb -Wall 
+CFLAGS1 =-g -Wall 
 CFLAGS2=-Wall -std=c99 -O3
 
 
@@ -10,6 +10,9 @@ SOURCES = backbone.c interfaces.c file.c
 #   Objects  ('Make' automatically compiles .c to .o)
 OBJECTS_A = backbone.o interfaces.o file.o
 
+
+.c.o:
+	$(CC) $(CFLAGS1) -c -o $@ $<
 
 backbone: $(OBJECTS_A)
 	$(CC) $(CFLAGS1) -o $@ $(OBJECTS_A)

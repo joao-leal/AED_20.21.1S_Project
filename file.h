@@ -2,7 +2,7 @@
 #define _FIRD_H_
 
 
-char *CheckCall(int, char const *);
+FILE *CheckCall(int, char const *);
 FILE *GetFile(char *);
 FILE *OutputFile(char *);
 
