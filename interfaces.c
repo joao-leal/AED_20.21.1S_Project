@@ -73,9 +73,11 @@ Graph *GRAPHinit(int V, int A)
 
         G->V = V; G->E = A; 
         G->adj = calloc(V, sizeof(int *));
+
         for(i = 0;  i < V; i++)
         {
             G->adj[i] = (double*) calloc((i+1), sizeof(double));
+            
         }
     }
     
@@ -83,9 +85,25 @@ Graph *GRAPHinit(int V, int A)
     return G;
 }
 
+void GRAPHpopulate(Graph *G, FILE *input)
+{
+    int i;
+
+    for(i = 0; i < G->V; i++)
+    {
+        int v_i = 0, v_j = 0;
+        double wt = 0;
+
+        fscanf(input, "%d %d %2lf", &v_i, &v_j, &wt);
+        if(v_i > v_j) G->adj[v_i][v_j] = wt;
+        else G->adj[v_j][v_i] = wt;
+       
+    }
+}
+
 void GRAPHinsertE(Graph *G, Edge *e)
 {
-    int v, w, wt;
+   /*  int v, w, wt;
     list *ptr = NULL;
 
     v = e->v -1;
@@ -104,7 +122,7 @@ void GRAPHinsertE(Graph *G, Edge *e)
         ptr->item = e;
         ptr->next = NULL;
               
-    }
+    } */
 
 }
 
@@ -114,17 +132,22 @@ void GRAPHinsertValue(Graph *G, int v, int t)
 
 void FreeGraph(Graph *G)
 {
-    int i, p;
+    int i;
 
     for(i = 0; i < G->V ; i++)
     {
         list *ptr, *aux;
 
-        ptr = G->adj[i];
-        if(ptr == NULL) free(G->adj[i]);    
+        if(G->V <= 50)
+        {
+            for(i = 0; i < G->V; i++)
+            {
+                free(G->adj[i]);
+            }
+        }  
         else
         {
-            for(; ptr != NULL;)
+            for(; ptr->next != NULL;)
             {
                 aux = ptr;
                 ptr = ptr->next;
@@ -133,6 +156,7 @@ void FreeGraph(Graph *G)
                 free(aux);
 
             }
+            
         }
     }
     

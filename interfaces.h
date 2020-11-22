@@ -21,7 +21,7 @@ typedef struct graph
 {
     int V;
     int E;
-    Item *adj;
+    double **adj;
 } Graph;
 typedef struct queue
 {
@@ -36,6 +36,7 @@ Edge *EDGE(int, int, int);
 
 /*---------- Graph Interface --------- */
 Graph *GRAPHinit(int, int); 
+void GRAPHpopulate(Graph *, FILE *);
 void GRAPHinsertE(Graph *, Edge *);
 void GRAPHinsertValue(Graph *, int, int);
 void GRAPHinsertString(Graph *, char*, int);

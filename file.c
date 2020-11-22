@@ -4,11 +4,13 @@
 
 #include "file.h"
 
-FILE *CheckCall(int argc, char const *arg){
+i_o_name *CheckCall(int argc, char const *arg){
 
-    int len=0, i=0, p;
-    char *sufix=NULL, *name=NULL;
-    FILE *input;
+    int alen=0, slen=0, i=0, p;
+    char *sufix=NULL, *path=NULL, *output=NULL;
+    i_o_name *fnames = NULL;
+
+    fnames = (i_o_name *) malloc(sizeof(i_o_name));
 
     if(argc != 2)
     {
@@ -16,63 +18,56 @@ FILE *CheckCall(int argc, char const *arg){
         exit(0);
     }
 
-    len = strlen(arg);
+    alen = strlen(arg) + 1;
     
-    i = strlen(".routes0");
-    sufix = (char*) calloc(i+2, sizeof(char));
+    slen = strlen(".routes0") + 1;
+
+    if(alen < slen) exit(0);
+
+    sufix = (char*) calloc(slen, sizeof(char));
     strcpy(sufix, ".routes0");
-    sufix[i+1] = '\0';
+    sufix[slen-1] = '\0';
 
-    name = (char*) calloc((len-i+1), sizeof(char));
-    strncpy(name, arg, len-i);
-    name[len-i] = '\0';
-
-    printf("%s\n", name);
-
-    
-    for(p = len; i >= 0; i--, p--)
+    /*checks if the extension is correct and if there's nothing after it*/
+    for(p = alen, i = slen; i > 0; i--, p--)
     {
-        if( arg[p] != sufix[i] )
+        if( arg[p-1] != sufix[i-1] )
         {
-            free(name);
+            free(path);
+            free(sufix);
+            free(fnames);
             exit(0);  
         } 
     }   
 
-    input = fopen(arg, "r");
+    fnames->i_name = (char *) arg;
 
-    free(name);
+    path = (char*) calloc((alen-slen+1), sizeof(char));
+    strncpy(path, arg, alen-slen);
+    path[alen-slen] = '\0';
+    printf("%s\n", path);
+
+    fnames->o_name = (output = OutputFile(path)); 
+
     free(sufix);
+    free(path);
 
-
-    return input;
+    return fnames;
 }
 
-FILE *OpenFile(char * name)
-{
-    FILE* fp;
-    
-    fp= fopen(name, "r");
-
-    return fp;
-}
-
-FILE *OutputFile(char *name)
+char *OutputFile(char *path)
 {   
-    FILE *fp;
     char *output = NULL;
 
-    int len = strlen(name) + strlen(".queries") + 1;
+    int len = strlen(path) + strlen(".queries0") + 2;
 
     output = (char*) malloc(len * sizeof(char));
 
-    strcat(output, name);
-    strcat(output, ".queries");
+    strcpy(output, path);
+    strcat(output, ".queries0");
+    output[len-1] = '\0';
     
-    fp = fopen(output, "a");    
-    free(output);
-
-    return fp;
+    return output;
 }
 
 

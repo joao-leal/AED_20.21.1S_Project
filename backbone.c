@@ -10,11 +10,18 @@ int main(int argc, char const *argv[])
 {
     Graph *G = NULL;
     FILE *input, *output;
+    i_o_name *fnames;
     
-    input = CheckCall(argc, (char*) argv[1]); 
+    
+    input = fopen((fnames = (CheckCall(argc, (char*) argv[1])))->i_name, "r");
+    if(input == NULL) exit(0);
     /*if the arguments are correct, CheckCall returns the name of the input file*/
+    output = fopen(fnames->o_name, "a");
+    if(output == NULL) exit(0);
 
-    
+    free(fnames->o_name);
+    free(fnames);
+
     do
     {
         int Apts, Rts, v_i, v_j, origin, dest;
@@ -22,6 +29,7 @@ int main(int argc, char const *argv[])
         char mode[3] = "";
 
         Apts = Rts = v_i = v_j = origin = dest = 0;
+        weight += 0;
 
         if(fscanf(input, "%d %d %s %d", &Apts, &Rts, mode, &v_i) != 4) 
         {
@@ -36,11 +44,12 @@ int main(int argc, char const *argv[])
             fscanf(input, "%d", &v_j);
         }
 
-        fprintf(stdout, "%d %d %s %d", Apts, Rts, mode, v_i);
-        if(!strcmp(mode, "B0")) fprintf(stdout, "%d", v_j);
+        fprintf(stdout, "%d %d %s %d ", Apts, Rts, mode, v_i);
+        if(!strcmp(mode, "B0")) fprintf(stdout, "%d\n", v_j);
         else fprintf(stdout, "\n");
 
         G = GRAPHinit(Apts, Rts);
+        GRAPHpopulate(G, input);
 
         switch (mode[0])
         {
@@ -54,7 +63,7 @@ int main(int argc, char const *argv[])
         case 'B':
             if(mode[1] == '0')
             {
-                /*B0();*/
+                B0(G, v_i, v_j);
             }
             break;        
 
@@ -81,8 +90,7 @@ int main(int argc, char const *argv[])
 
     FreeGraph(G);
     fclose(input);
-
-
+    fclose(output);
 
     return 0;
     
@@ -95,10 +103,11 @@ void A0()
 
 }
 
-int B0(Graph *G, int v, int w)
+double B0(Graph *G, int v_i, int v_j)
 {
-
-   return 0; 
+    if(v_i > v_j && G->adj[v_i][v_j] > 0) return G->adj[v_i][v_j];
+    else if(G->adj[v_j][v_i] > 0) return G->adj[v_j][v_i];
+    else return 0; 
 }
 
 void C0(){
