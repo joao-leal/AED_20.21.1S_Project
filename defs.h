@@ -7,7 +7,7 @@
 /**/
 void A0(); 
 
-/*Returns 1 if there's a route between the two airports, otherwise returns 0*/
+/*Returns the route and its cost if there's one route between the two airports, otherwise returns -1*/
 double B0(Graph *, int, int); 
 
 /**/

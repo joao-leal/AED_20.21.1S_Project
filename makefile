@@ -25,12 +25,15 @@ final :$(OBJECTS_A)
 clean:
 	rm -f *.o *.~ *.gch
 
-# FILES = $(shell ls Testes/*.graph0)
-# OUTPUT = $(shell ls ./primeiro/*.wordz)
-# TEST = $(shell ls ./primeiro/*.wordz)
+FILES = $(shell ls testes/Enunciado/*.routes0)
+OUTPUT = $(shell ls ./primeiro/*.wordz)
+TEST = $(shell ls ./primeiro/*.wordz)
 
-# all:
-# 	for F in Testes/*.graph0; do ./wordz Testes/portugues.dict $${F} ; done;
+all:
+	for F in testes/Enunciado/*B0*.routes0; do ./backbone $${F} ; done;
+
+diff:
+	for F in testes/Enunciado/*B0*.queries; do diff $$F $${F}0; done;
 # prim:
 # 	for F in Testes/primeiro*.graph0; do ./wordz Testes/curto.dict $${F} ; done;
 
@@ -51,5 +54,3 @@ clean:
 # proc:
 # 	for F in Testes/processo*.graph0; do ./wordz Testes/portugues.dict $${F} ; done;
 
-# diff:
-# 	for F in Testes/*.wordz; do diff $$F $${F}0; done;

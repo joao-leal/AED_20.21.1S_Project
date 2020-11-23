@@ -70,4 +70,17 @@ char *OutputFile(char *path)
     return output;
 }
 
-
+void WriteFile(FILE *fp, out_write *result)
+{
+    /*mode B0 has route*/
+    if(result->result == 0)
+    {
+        if(result->weight > 0) fprintf(fp, "%d %d %s %d %d %.2lf\n\n", result->V, result->A, result->mode, result->v_i, result->v_j, result->weight);
+        else fprintf(fp, "%d %d %s %d %d -1\n\n", result->V, result->A, result->mode, result->v_i, result->v_j);
+    } 
+    else
+    {
+        fprintf(fp, "%d %d %s %d\n\n", result->V, result->A, result->mode, result->result);
+    } 
+    return;
+}

@@ -23,13 +23,12 @@ typedef struct graph
     int E;
     double **adj;
 } Graph;
+
 typedef struct queue
 {
     list * first;
     list * last; 
 } Q;
-
-
 
 Edge *EDGE(int, int, int);
 
@@ -50,9 +49,8 @@ void FreeGraph(Graph *);
 
 /*----------- BFS Algorithm -------------*/
 void bfs(Graph *, Edge *);
-
-
 /********************************/
+
 
 /*-----------  List Interface -----------*/
 list *LISTNewEl(list *, Item);
@@ -62,6 +60,8 @@ list *LISTNext(list *);
 Item LISTGetEl(list *);
 /***************************************/
 
+
+
 /*---------- Queue Interface ----------*/
 void QueueDump(Q *);
 Q *QueueInit(int);
@@ -70,10 +70,5 @@ void QueuePut(Q*, Item);
 Item QueueGet(Q*);
 Item QueueNew(Item, list*);
 /*-------------------------------------*/
-
-
-
-
-
 
 #endif

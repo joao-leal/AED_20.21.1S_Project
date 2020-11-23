@@ -7,9 +7,21 @@ typedef struct _i_o_name
     char *o_name;
 } i_o_name;
 
+typedef struct _out_write
+{
+    int V;
+    int A;
+    char *mode;
+    int v_i;
+    int v_j;
+    int result;
+    double weight;
+} out_write;
+
+
 i_o_name *CheckCall(int, char const *);
 char *OutputFile(char *);
-FILE *GetFile(char *);
+void WriteFile(FILE *fp, out_write *result);
 
 
 #endif

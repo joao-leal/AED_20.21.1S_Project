@@ -5,7 +5,6 @@
 #include "interfaces.h"
 
 
-
 Edge *EDGE(int v, int w, int wt)
 {
     Edge *E = (Edge*) malloc(sizeof(Edge)) ;
@@ -94,10 +93,10 @@ void GRAPHpopulate(Graph *G, FILE *input)
         int v_i = 0, v_j = 0;
         double wt = 0;
 
-        fscanf(input, "%d %d %2lf", &v_i, &v_j, &wt);
-        if(v_i > v_j) G->adj[v_i][v_j] = wt;
-        else G->adj[v_j][v_i] = wt;
-       
+        fscanf(input, "%d %d %lf \n", &v_i, &v_j, &wt);
+        if(v_i > v_j) G->adj[v_i-1][v_j-1] = wt;
+        else G->adj[v_j-1][v_i-1] = wt;
+        
     }
 }
 
@@ -165,8 +164,6 @@ void FreeGraph(Graph *G)
 }
 
 /*------------------------------------------------*/
-
-
 
 
 /*---------- Queue Interface ----------*/
