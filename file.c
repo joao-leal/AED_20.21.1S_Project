@@ -78,9 +78,11 @@ void WriteFile(FILE *fp, out_write *result)
         if(result->weight > 0) fprintf(fp, "%d %d %s %d %d %.2lf\n\n", result->V, result->A, result->mode, result->v_i, result->v_j, result->weight);
         else fprintf(fp, "%d %d %s %d %d -1\n\n", result->V, result->A, result->mode, result->v_i, result->v_j);
     } 
-    else
+    else if(result->result == -1)
     {
-        fprintf(fp, "%d %d %s %d\n\n", result->V, result->A, result->mode, result->result);
+        fprintf(fp, "%d %d %s -1\n\n", result->V, result->A, result->mode);
     } 
+    else fprintf(fp, "%d %d %s %d %d\n\n", result->V, result->A, result->mode, result->v_i, result->result);
+
     return;
 }

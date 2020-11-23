@@ -4,8 +4,8 @@
 
 #include "interfaces.h"
 
-/**/
-void A0(); 
+/*Returns the depth of the vertice given as input*/
+int A0(Graph *, int);
 
 /*Returns the route and its cost if there's one route between the two airports, otherwise returns -1*/
 double B0(Graph *, int, int); 

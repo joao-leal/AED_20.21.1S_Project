@@ -54,7 +54,8 @@ int main(int argc, char const *argv[])
         case 'A':
             if(mode[1] == '0')
             {
-                A0();
+                out_write result = {Apts, Rts, mode, v_i, 0, A0(G, v_i), 0 };
+                WriteFile(output, &result);
             }
             break;
 
@@ -98,9 +99,17 @@ int main(int argc, char const *argv[])
 
 
 
-void A0()
+int A0(Graph *G, int v)
 {
+    int i, cnt = 0;
 
+    for(i = 0; i < G->V; i++)
+    {
+        if( i < v-1 && G->adj[v-1][i] > 0.0) cnt++; 
+        else if(i > v-1 && G->adj[i][v-1] > 0.0) cnt++;
+    }
+
+    return cnt;
 }
 
 double B0(Graph *G, int v_i, int v_j)

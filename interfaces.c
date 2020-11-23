@@ -88,7 +88,7 @@ void GRAPHpopulate(Graph *G, FILE *input)
 {
     int i;
 
-    for(i = 0; i < G->V; i++)
+    for(i = 0; i < G->E; i++)
     {
         int v_i = 0, v_j = 0;
         double wt = 0;
