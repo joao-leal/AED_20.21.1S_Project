@@ -107,8 +107,8 @@ double B0(Graph *G, int v_i, int v_j)
 {
     int x = v_i - 1, y = v_j - 1;
 
-    if(v_i > v_j && G->adj[x][y] > 0.0) return G->adj[x][y];
-    else if(G->adj[y][x] > 0.0) return G->adj[y][x];
+    if(v_i > v_j && G->adj[x][y] >= 0.0) return G->adj[x][y];
+    else if(G->adj[y][x] >= 0.0) return G->adj[y][x];
     else return -1; 
 }
 
