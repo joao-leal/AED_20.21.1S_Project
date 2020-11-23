@@ -12,10 +12,10 @@ int main(int argc, char const *argv[])
     FILE *input, *output;
     i_o_name *fnames;
     
-    
+    /*if the arguments are correct, CheckCall returns the name of the input file*/
     input = fopen((fnames = (CheckCall(argc, (char*) argv[1])))->i_name, "r");
     if(input == NULL) exit(0);
-    /*if the arguments are correct, CheckCall returns the name of the input file*/
+ 
     output = fopen(fnames->o_name, "a+");
     if(output == NULL) exit(0);
 
@@ -33,13 +33,13 @@ int main(int argc, char const *argv[])
         {
             if(!strcmp(mode, "B0"))
             {
-                fscanf(input, "%d", &v_j);
+                if(fscanf(input, "%d", &v_j) != 1) exit(0);
             }
             else exit(0);
         }
         else if (!strcmp(mode, "B0"))
         {
-            fscanf(input, "%d", &v_j);
+            if(fscanf(input, "%d", &v_j) != 1) exit(0);
         }
 
         fprintf(stdout, "%d %d %s %d ", Apts, Rts, mode, v_i);
@@ -86,12 +86,13 @@ int main(int argc, char const *argv[])
             exit(0);
         }
 
-    } while (feof(input));
+    } while (!feof(input));
     
 
     FreeGraph(G);
     fclose(input);
     fclose(output);
+    printf("Ta");
 
     return 0;
     
