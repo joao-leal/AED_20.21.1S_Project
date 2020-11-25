@@ -11,23 +11,24 @@ typedef struct edge
     int weight;
 } Edge;
 
-typedef struct _list
+typedef struct node
 {
-    Item item;
-    struct _list *next;
-} list;
+    int v;
+    double wt;
+    struct node *next;
+} link;
 
 typedef struct graph
 {
     int V;
     int E;
-    double **adj;
+    link **adj;
 } Graph;
 
 typedef struct queue
 {
-    list * first;
-    list * last; 
+    link * first;
+    link * last; 
 } Q;
 
 Edge *EDGE(int, int, int);
@@ -52,12 +53,12 @@ void bfs(Graph *, Edge *);
 /********************************/
 
 
-/*-----------  List Interface -----------*/
-list *LISTNewEl(list *, Item);
-void LISTFreeEl(list *);
-void LISTDelNext(list *);
-list *LISTNext(list *);
-Item LISTGetEl(list *);
+/*-----------  link Interface -----------*/
+link *NEW(link *, int, double);
+void LISTFreeEl(link *);
+void LISTDelNext(link *);
+link *LISTNext(link *);
+Item LISTGetEl(link *);
 /***************************************/
 
 
@@ -68,7 +69,7 @@ Q *QueueInit(int);
 int QueueEmpty(Q*);
 void QueuePut(Q*, Item);
 Item QueueGet(Q*);
-Item QueueNew(Item, list*);
+Item QueueNew(Item, link*);
 /*-------------------------------------*/
 
 #endif

@@ -4,6 +4,9 @@
 
 #include "interfaces.h"
 
+void BuildGraph(Graph *, FILE *);
+
+
 /*Returns the depth of the vertice given as input*/
 int A0(Graph *, int);
 

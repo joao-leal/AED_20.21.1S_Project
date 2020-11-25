@@ -8,10 +8,10 @@
 
 int main(int argc, char const *argv[])
 {
-    Graph *G = NULL;
+    Graph *A_N = NULL; /*A_N stands for Airport Network*/ 
     FILE *input, *output;
     i_o_name *fnames;
-    
+
     /*if the arguments are correct, CheckCall returns the name of the input file*/
     input = fopen((fnames = (CheckCall(argc, (char*) argv[1])))->i_name, "r");
     if(input == NULL) exit(0);
@@ -46,15 +46,15 @@ int main(int argc, char const *argv[])
         if(!strcmp(mode, "B0")) fprintf(stdout, "%d\n", v_j);
         else fprintf(stdout, "\n");
 
-        G = GRAPHinit(Apts, Rts);
-        GRAPHpopulate(G, input);
+        A_N = GRAPHinit(Apts, Rts);
+        BuildGraph(A_N, input);
 
         switch (mode[0])
         {
         case 'A':
             if(mode[1] == '0')
             {
-                out_write result = {Apts, Rts, mode, v_i, 0, A0(G, v_i), 0 };
+                out_write result = {Apts, Rts, mode, v_i, 0, A0(A_N, v_i), 0 };
                 WriteFile(output, &result);
             }
             break;
@@ -62,7 +62,7 @@ int main(int argc, char const *argv[])
         case 'B':
             if(mode[1] == '0')
             {
-                out_write result = {Apts, Rts, mode, v_i, v_j, 0, B0(G, v_i, v_j)};
+                out_write result = {Apts, Rts, mode, v_i, v_j, 0, B0(A_N, v_i, v_j)};
                 WriteFile(output, &result);
                 
             }
@@ -89,7 +89,7 @@ int main(int argc, char const *argv[])
     } while (!feof(input));
     
 
-    FreeGraph(G);
+    FreeGraph(A_N);
     fclose(input);
     fclose(output);
     printf("Ta");
@@ -100,9 +100,25 @@ int main(int argc, char const *argv[])
 
 
 
+
+void BuildGraph(Graph *G, FILE *fp)
+{
+    int i, v, w;
+    double wt;
+
+    for(i = 0; i < G->E; i++)
+    {
+        if(fscanf(fp, "%d %d %lf", &v, &w, &wt) != 3) exit(0);
+
+        GRAPHinsertE(G, EDGE(v, w, wt)); 
+    }
+      
+}
+
+
 int A0(Graph *G, int v)
 {
-    int i, cnt = 0;
+   /*  int i, cnt = 0;
 
     for(i = 0; i < G->V; i++)
     {
@@ -110,16 +126,18 @@ int A0(Graph *G, int v)
         else if(i > v-1 && G->adj[i][v-1] > 0.0) cnt++;
     }
 
-    return cnt;
+    return cnt; */
+    return 0;
 }
 
 double B0(Graph *G, int v_i, int v_j)
 {
-    int x = v_i - 1, y = v_j - 1;
+ /*    int x = v_i - 1, y = v_j - 1;
 
     if(v_i > v_j && G->adj[x][y] >= 0.0) return G->adj[x][y];
     else if(G->adj[y][x] >= 0.0) return G->adj[y][x];
-    else return -1; 
+    else return -1;  */
+    return 0;
 }
 
 void C0(){

@@ -16,117 +16,48 @@ Edge *EDGE(int v, int w, int wt)
 }
 
 
-/*---------- List Interface ----------*/
-list *LISTNewEl(list *ptr, Item N)
+/*---------- link Interface ----------*/
+link *NEW(link *ptr, int v, double wt)
 {
-    list *aux = (list *) calloc(1, sizeof(list));
+    link *t = (link *) malloc(sizeof(link));
 
-    if(ptr == NULL)
-    {
-        aux->next = NULL;
-    }
-    else
-    {
-        aux->next = ptr;
-    }
-    
-    aux->item = N;
+    t->v = v;
+    t->wt = wt;
+    t->next = ptr;
 
-    return aux;
+    return t;
 }
 
-list *LISTNext(list *ptr)
+link *LISTNext(link *ptr)
 {
     return ptr->next;
 }
-
-Item LISTGetEl(list *ptr)
-{
-    return ptr->item;
-}
-/*-------------------------------------*/
+/*-----------------------------------*/
 
 
  /*---------------- Graph Interface ----------------*/
 Graph *GRAPHinit(int V, int A)
 {
+    int v;
+    Graph *G = (Graph*) calloc(1, sizeof(Graph));
+    if(G == NULL) exit(0);
 
-    Graph *G = NULL;
-
-    if(V > 50)
-    {
-        G =  (Graph*) calloc(1, sizeof(Graph));
-        if(G == NULL) exit(0);
-
-        G->adj = NULL;
-        G->V = V; G->E = A; 
-        G->adj = calloc(V, sizeof(struct _list*));
-        if(G->adj == NULL) fprintf(stderr, "Can't allocate Graph");
-    }
-    else
-    {
-        int i;
-
-        G = (Graph*) calloc(1, sizeof(Graph));
-        if(G == NULL) exit(0);
-
-        G->V = V; G->E = A; 
-        G->adj = calloc(V, sizeof(int *));
-
-        for(i = 0;  i < V; i++)
-        {
-            G->adj[i] = (double*) calloc((i+1), sizeof(double));
-            
-        }
-    }
-    
+    G->V = V; G->E = 0; 
+    G->adj = (link **) malloc(V * sizeof(struct _list*));
+    for(v = 0; v < V; v++) G->adj[v] = NULL;
+    if(G->adj == NULL) exit(0);
     
     return G;
 }
 
-void GRAPHpopulate(Graph *G, FILE *input)
-{
-    int i;
-
-    for(i = 0; i < G->E; i++)
-    {
-        int v_i = 0, v_j = 0;
-        double wt = 0;
-
-        fscanf(input, "%d %d %lf \n", &v_i, &v_j, &wt);
-        if(v_i > v_j) G->adj[v_i-1][v_j-1] = wt;
-        else G->adj[v_j-1][v_i-1] = wt;
-        
-    }
-}
-
 void GRAPHinsertE(Graph *G, Edge *e)
 {
-   /*  int v, w, wt;
-    list *ptr = NULL;
+    int v = e->v, w = e->w;
+    double wt = e->weight;
 
-    v = e->v -1;
-    w = e->w -1;
-    wt = e->weight;
-
-    if(G->adj[v] == NULL)
-    {
-        G->adj[v] = (list*) malloc(sizeof(struct _list));
-
-
-        if(G->adj[v] == NULL) exit(0);
-
-        ptr = G->adj[v];
-
-        ptr->item = e;
-        ptr->next = NULL;
-              
-    } */
-
-}
-
-void GRAPHinsertValue(Graph *G, int v, int t)
-{
+    G->adj[v] = NEW(G->adj[v], w, wt);
+    G->adj[w] = NEW(G->adj[w], v, wt);
+    G->E++;
 }
 
 void FreeGraph(Graph *G)
@@ -135,27 +66,14 @@ void FreeGraph(Graph *G)
 
     for(i = 0; i < G->V ; i++)
     {
-        list *ptr, *aux;
+        link *ptr, *aux;
 
-        if(G->V <= 50)
+        for(; ptr->next != NULL;)
         {
-            for(i = 0; i < G->V; i++)
-            {
-                free(G->adj[i]);
-            }
-        }  
-        else
-        {
-            for(; ptr->next != NULL;)
-            {
-                aux = ptr;
-                ptr = ptr->next;
+            aux = ptr;
+            ptr = ptr->next;
 
-                free(aux->item);
-                free(aux);
-
-            }
-            
+            free(aux);
         }
     }
     
@@ -167,10 +85,11 @@ void FreeGraph(Graph *G)
 
 
 /*---------- Queue Interface ----------*/
-Item QueueNew(Item vItem, list *pNext)
+/* Item QueueNew(int v, double wt, link *pNext)
 {
-    list *x = (list *) malloc(sizeof(list));
-    x->item = vItem;
+    link *x = (link *) malloc(sizeof(link));
+    x->v = v;
+    x->wt = wt;
     x->next = pNext;
 
     return x;
@@ -186,33 +105,32 @@ Q *QueueInit(int maxN)
 
 void QueuePut(Q *pQueue, Item vI)
 {
-    if(pQueue->first == NULL) /*Empty Queue*/
+    if(pQueue->first == NULL) Empty Queue
     {
         pQueue->last = QueueNew(vI, pQueue->first);
         pQueue->first = pQueue->first;
         return;
     }
 
-    /*Item put in as last*/
+    Item put in as last
     pQueue->last->next = QueueNew(vI, NULL);
     pQueue->last = pQueue->last->next;
 }
 
-Item QueueGet(Q *pQueue)
+Edge* QueueGet(Q *pQueue)
 {
-    Item item = pQueue->first->item;
-    list *l = pQueue->first->next;
-
+    link *l = pQueue->first->next;
+    Edge *e = EDGE(pQueue->first->v,0, pQueue->first->wt);
     free(pQueue->first);
     pQueue->first = l;
 
-    return item;
+    return e;
 }
 
 int QueueEmpty(Q *pQueue)
 {
     return (pQueue->first == NULL);
-}
+} */
 /*-------------------------------------*/
 
 
