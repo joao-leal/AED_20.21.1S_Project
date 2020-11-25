@@ -14,10 +14,20 @@ int main(int argc, char const *argv[])
     
     /*if the arguments are correct, CheckCall returns the name of the input file*/
     input = fopen((fnames = (CheckCall(argc, (char*) argv[1])))->i_name, "r");
-    if(input == NULL) exit(0);
+    if(input == NULL)
+    {
+        free(fnames->o_name);
+        free(fnames);
+        exit(0);
+    } 
  
     output = fopen(fnames->o_name, "a+");
-    if(output == NULL) exit(0);
+    if(output == NULL)
+    {
+        free(fnames->o_name);
+        free(fnames);
+        exit(0);
+    } 
 
     free(fnames->o_name);
     free(fnames);
@@ -92,7 +102,6 @@ int main(int argc, char const *argv[])
     FreeGraph(G);
     fclose(input);
     fclose(output);
-    printf("Ta");
 
     return 0;
     

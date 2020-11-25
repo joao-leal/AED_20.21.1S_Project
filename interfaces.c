@@ -50,55 +50,20 @@ Item LISTGetEl(list *ptr)
  /*---------------- Graph Interface ----------------*/
 Graph *GRAPHinit(int V, int A)
 {
-
     Graph *G = NULL;
 
-    if(V > 50)
-    {
-        G =  (Graph*) calloc(1, sizeof(Graph));
-        if(G == NULL) exit(0);
+    G =  (Graph*) calloc(1, sizeof(Graph));
+    if(G == NULL) exit(0);
 
-        G->adj = NULL;
-        G->V = V; G->E = A; 
-        G->adj = calloc(V, sizeof(struct _list*));
-        if(G->adj == NULL) fprintf(stderr, "Can't allocate Graph");
-    }
-    else
-    {
-        int i;
-
-        G = (Graph*) calloc(1, sizeof(Graph));
-        if(G == NULL) exit(0);
-
-        G->V = V; G->E = A; 
-        G->adj = calloc(V, sizeof(int *));
-
-        for(i = 0;  i < V; i++)
-        {
-            G->adj[i] = (double*) calloc((i+1), sizeof(double));
-            
-        }
-    }
-    
+    G->adj = NULL;
+    G->V = V; G->E = A; 
+    G->adj = calloc(V, sizeof(struct _list*));
+    if(G->adj == NULL) fprintf(stderr, "Can't allocate Graph");
     
     return G;
 }
 
-void GRAPHpopulate(Graph *G, FILE *input)
-{
-    int i;
 
-    for(i = 0; i < G->E; i++)
-    {
-        int v_i = 0, v_j = 0;
-        double wt = 0;
-
-        fscanf(input, "%d %d %lf \n", &v_i, &v_j, &wt);
-        if(v_i > v_j) G->adj[v_i-1][v_j-1] = wt;
-        else G->adj[v_j-1][v_i-1] = wt;
-        
-    }
-}
 
 void GRAPHinsertE(Graph *G, Edge *e)
 {

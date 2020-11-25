@@ -8,7 +8,7 @@ typedef struct edge
 {
     int v;
     int w;
-    int weight;
+    double weight;
 } Edge;
 
 typedef struct _list
