@@ -1,6 +1,6 @@
 #   Compiler, Compiler Flags
 CC = gcc
-CFLAGS1 =-g -Wall 
+CFLAGS1 =-g -Wall
 CFLAGS2=-Wall -std=c99 -O3
 
 

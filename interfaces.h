@@ -8,7 +8,7 @@ typedef struct edge
 {
     int v;
     int w;
-    int weight;
+    double weight;
 } Edge;
 
 typedef struct node
@@ -31,7 +31,7 @@ typedef struct queue
     link * last; 
 } Q;
 
-Edge *EDGE(int, int, int);
+Edge *EDGE(int, int, double);
 
 
 /*---------- Graph Interface --------- */

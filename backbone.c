@@ -87,7 +87,6 @@ int main(int argc, char const *argv[])
         }
 
     } while (!feof(input));
-    
 
     FreeGraph(A_N);
     fclose(input);
@@ -99,8 +98,6 @@ int main(int argc, char const *argv[])
 }
 
 
-
-
 void BuildGraph(Graph *G, FILE *fp)
 {
     int i, v, w;
@@ -108,9 +105,10 @@ void BuildGraph(Graph *G, FILE *fp)
 
     for(i = 0; i < G->E; i++)
     {
-        if(fscanf(fp, "%d %d %lf", &v, &w, &wt) != 3) exit(0);
+        if(fscanf(fp, "%d %d %lf\n", &v, &w, &wt) != 3) exit(0);
 
         GRAPHinsertE(G, EDGE(v, w, wt)); 
+        printf("%d %d %.2lf\n", v, G->adj[v-1]->v, G->adj[v-1]->wt);
     }
       
 }

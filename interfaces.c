@@ -5,7 +5,7 @@
 #include "interfaces.h"
 
 
-Edge *EDGE(int v, int w, int wt)
+Edge *EDGE(int v, int w, double wt)
 {
     Edge *E = (Edge*) malloc(sizeof(Edge)) ;
     E->v = v;
@@ -42,8 +42,8 @@ Graph *GRAPHinit(int V, int A)
     Graph *G = (Graph*) calloc(1, sizeof(Graph));
     if(G == NULL) exit(0);
 
-    G->V = V; G->E = 0; 
-    G->adj = (link **) malloc(V * sizeof(struct _list*));
+    G->V = V; G->E = A; 
+    G->adj = (link **) malloc(V * sizeof(struct node *));
     for(v = 0; v < V; v++) G->adj[v] = NULL;
     if(G->adj == NULL) exit(0);
     
@@ -55,31 +55,30 @@ void GRAPHinsertE(Graph *G, Edge *e)
     int v = e->v, w = e->w;
     double wt = e->weight;
 
-    G->adj[v] = NEW(G->adj[v], w, wt);
-    G->adj[w] = NEW(G->adj[w], v, wt);
-    G->E++;
+    G->adj[v-1] = NEW(G->adj[v-1], w, wt);
+    G->adj[w-1] = NEW(G->adj[w-1], v, wt);
+
+    free(e);
 }
 
 void FreeGraph(Graph *G)
 {
-    int i;
+    int v;
+    link *aux;
 
-    for(i = 0; i < G->V ; i++)
+    for(v=0; v < G->V; v++)
     {
-        link *ptr, *aux;
-
-        for(; ptr->next != NULL;)
+        while (G->adj[v] != NULL)
         {
-            aux = ptr;
-            ptr = ptr->next;
-
+            aux = G->adj[v];
+            G->adj[v] = G->adj[v]->next;
             free(aux);
-        }
+        } 
     }
-    
     free(G->adj);
     free(G);
 }
+
 
 /*------------------------------------------------*/
 
