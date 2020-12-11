@@ -8,8 +8,6 @@
 
 #define maxINT 1000
 
-static int fr[maxINT];
-
 
 int main(int argc, char const *argv[])
 {
