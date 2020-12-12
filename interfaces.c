@@ -10,7 +10,7 @@ Edge *EDGE(int v, int w, double wt)
     Edge *E = (Edge*) malloc(sizeof(Edge)) ;
     E->v = v;
     E->w = w;
-    E->weight = wt;
+    E->wt = wt;
     
     return E;
 }
@@ -43,37 +43,25 @@ Graph *GRAPHinit(int V, int A)
     if(G == NULL) exit(0);
 
     G->V = V; G->E = A; 
-    G->adj = (link **) malloc(V * sizeof(struct node *));
+    G->adj = (Edge **) malloc(G->E * sizeof(struct edge *)); 
     for(v = 0; v < V; v++) G->adj[v] = NULL;
     if(G->adj == NULL) exit(0);
     
     return G;
 }
 
-void GRAPHinsertE(Graph *G, Edge *e)
+void GRAPHinsertE(Graph *G, Edge *e, int i)
 {
-    int v = e->v, w = e->w;
-    double wt = e->weight;
-
-    G->adj[v-1] = NEW(G->adj[v-1], w, wt);
-    G->adj[w-1] = NEW(G->adj[w-1], v, wt);
-
-    free(e);
+    G->adj[i] = e;
 }
 
 void FreeGraph(Graph *G)
 {
-    int v;
-    link *aux;
+    int i;
 
-    for(v=0; v < G->V; v++)
+    for(i = 0; i < G->E; i++)
     {
-        while (G->adj[v] != NULL)
-        {
-            aux = G->adj[v];
-            G->adj[v] = G->adj[v]->next;
-            free(aux);
-        } 
+        free(G->adj[i]);
     }
     free(G->adj);
     free(G);

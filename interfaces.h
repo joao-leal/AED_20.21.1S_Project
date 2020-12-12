@@ -8,7 +8,7 @@ typedef struct edge
 {
     int v;
     int w;
-    double weight;
+    double wt;
 } Edge;
 
 typedef struct node
@@ -37,7 +37,7 @@ Edge *EDGE(int, int, double);
 /*---------- Graph Interface --------- */
 Graph *GRAPHinit(int, int); 
 void GRAPHpopulate(Graph *, FILE *);
-void GRAPHinsertE(Graph *, Edge *);
+void GRAPHinsertE(Graph *, Edge *, int);
 void GRAPHinsertValue(Graph *, int, int);
 void GRAPHinsertString(Graph *, char*, int);
 void GRAPHremoveE(Graph *, Edge *);

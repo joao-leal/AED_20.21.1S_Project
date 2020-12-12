@@ -8,17 +8,17 @@ void BuildGraph(Graph *, FILE *);
 
 
 /*Returns the depth of the vertice given as input*/
-int A0(Graph *, int);
-
+void A1();
 /*Returns the route and its cost if there's one route between the two airports, otherwise returns -1*/
-double B0(Graph *, int, int); 
+double B1(); 
 
 /**/
-void C0(); 
+void C1(); 
 
 /**/
-void D0(Graph *); 
+void D1(); 
 
+void E1(); 
 
 
 #endif
