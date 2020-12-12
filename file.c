@@ -14,18 +14,16 @@ i_o_name *CheckCall(int argc, char const *arg){
 
     if(argc != 2)
     {
-        if(fprintf(stderr, "ERROR: Input file not given!\n"))
         exit(0);
     }
 
     alen = strlen(arg) + 1;
     
-    slen = strlen(".routes0") + 1;
-
+    slen = strlen(".routes") + 1;           
     if(alen < slen) exit(0);
 
     sufix = (char*) calloc(slen, sizeof(char));
-    strcpy(sufix, ".routes0");
+    strcpy(sufix, ".routes");
     sufix[slen-1] = '\0';
 
     /*checks if the extension is correct and if there's nothing after it*/
@@ -45,6 +43,7 @@ i_o_name *CheckCall(int argc, char const *arg){
     path = (char*) calloc((alen-slen+1), sizeof(char));
     strncpy(path, arg, alen-slen);
     path[alen-slen] = '\0';
+
     printf("%s\n", path);
 
     fnames->o_name = (output = OutputFile(path)); 
@@ -59,12 +58,12 @@ char *OutputFile(char *path)
 {   
     char *output = NULL;
 
-    int len = strlen(path) + strlen(".queries0") + 2;
+    int len = strlen(path) + strlen(".bbones") + 2;
 
     output = (char*) malloc(len * sizeof(char));
 
     strcpy(output, path);
-    strcat(output, ".queries0");
+    strcat(output, ".bbones");
     output[len-1] = '\0';
     
     return output;

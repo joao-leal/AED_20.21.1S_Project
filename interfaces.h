@@ -22,7 +22,7 @@ typedef struct graph
 {
     int V;
     int E;
-    link **adj;
+    Edge **adj;
 } Graph;
 
 typedef struct queue

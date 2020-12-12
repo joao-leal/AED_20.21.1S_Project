@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
     if(output == NULL) exit(0);
 
     free(fnames->o_name);
-    free(fnames);
+    free(fnames); 
 
     do
     {
@@ -145,7 +145,7 @@ void BuildGraph(Graph *G, FILE *fp)
         if(fscanf(fp, "%d %d %lf\n", &v, &w, &wt) != 3) exit(0);
 
         GRAPHinsertE(G, EDGE(v, w, wt)); 
-        printf("%d %d %.2lf\n", v, G->adj[v-1]->v, G->adj[v-1]->wt);
+       
     }
       
 }
