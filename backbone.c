@@ -7,13 +7,6 @@
 #include "interfaces.h"
 
 
-#define key(A) (A)
-#define less(A, B) (key(A) < key(B))
-#define exch(A, B) {Item t = A; A = B; B = t; }
-#define compexch(A, B) if (less(B,A)) exch(A, B)
-
-
-
 int main(int argc, char const *argv[])
 {
     Graph *A_N = NULL; /*A_N stands for Airport Network*/ 
@@ -133,6 +126,12 @@ void BuildGraph(Graph *G, FILE *fp)
         GRAPHinsertE(G, EDGE(v, w, wt), i);
         printf("{%d-%d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
     }
+
+    printf("\n");
+    sort(G->adj, G->E);
+
+    for(i = 0; i < G->E; i++) printf("{%d-%d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
+    printf("\n");
       
 }
 
@@ -167,4 +166,12 @@ void D1(){
 
 void E1(){
 
+}
+
+
+
+void sort(Edge **a, int E)
+{
+    // bubble(a, 0, E-1);
+    insertion(a, 0, E-1);
 }

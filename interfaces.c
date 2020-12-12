@@ -14,6 +14,16 @@ Edge *EDGE(int v, int w, double wt)
     
     return E;
 }
+/* 
+void Item_swap(Item a, Item b)
+{
+    Item aux;
+
+    aux = a;
+    a = b;
+    b = aux;
+}
+ */
 
 
 /*---------- link Interface ----------*/
@@ -67,9 +77,40 @@ void FreeGraph(Graph *G)
     free(G);
 }
 
-
 /*------------------------------------------------*/
 
+
+/*----------------- SORTING -------------------*/
+void bubble(Edge **a, int l, int r)
+{
+    int i, j;
+
+    for (j = r; j > l; j--)
+        for (i = l; i < j; i++)
+            if(more(a[i]->wt, a[i+1]->wt)) exch(a[i], a[i+1]);
+}
+
+
+void insertion(Edge **a, int l, int r)
+{
+    int i, j;
+
+    for (i = l+1; i <= r; i++)
+    {
+        Edge *v = a[i];
+        j = i;
+        while (j > l && less(v->wt, a[j-1]->wt))
+        {
+            a[j] = a[j-1];
+            j--;
+        }
+        a[j] = v;
+    }
+}
+
+/*-----------------------------------------------*/
+
+    
 
 /*---------- Queue Interface ----------*/
 /* Item QueueNew(int v, double wt, link *pNext)

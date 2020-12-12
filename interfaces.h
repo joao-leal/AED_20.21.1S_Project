@@ -2,6 +2,13 @@
 #define _GRAPH_H_
 
 
+#define key(A) (A)
+#define less(A, B) (key(A) < key(B))
+#define more(A, B) (key(A) > key(B))
+#define exch(A, B) {Item t = A; A = B; B = t; }
+#define compexch(A, B) if (less(B,A)) exch(A, B)
+
+
 typedef void * Item;
 
 typedef struct edge
@@ -32,6 +39,7 @@ typedef struct queue
 } Q;
 
 Edge *EDGE(int, int, double);
+void Item_swap(Item *, Item *);
 
 
 /*---------- Graph Interface --------- */
@@ -50,7 +58,13 @@ void FreeGraph(Graph *);
 
 /*----------- BFS Algorithm -------------*/
 void bfs(Graph *, Edge *);
+/*****************************************/
+
+/*----------- SORT -------------*/
+void bubble(Edge **, int, int);
+void insertion(Edge **, int, int);
 /********************************/
+
 
 
 /*-----------  link Interface -----------*/

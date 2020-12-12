@@ -4,7 +4,12 @@
 
 #include "interfaces.h"
 
+
+
+
+
 void BuildGraph(Graph *, FILE *);
+void sort(Edge **, int);
 
 
 /*Returns the depth of the vertice given as input*/
