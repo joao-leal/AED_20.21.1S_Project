@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "interfaces.h"
 
@@ -14,16 +15,6 @@ Edge *EDGE(int v, int w, double wt)
     
     return E;
 }
-/* 
-void Item_swap(Item a, Item b)
-{
-    Item aux;
-
-    aux = a;
-    a = b;
-    b = aux;
-}
- */
 
 
 /*---------- link Interface ----------*/
@@ -90,7 +81,6 @@ void bubble(Edge **a, int l, int r)
             if(more(a[i]->wt, a[i+1]->wt)) exch(a[i], a[i+1]);
 }
 
-
 void insertion(Edge **a, int l, int r)
 {
     int i, j;
@@ -108,9 +98,88 @@ void insertion(Edge **a, int l, int r)
     }
 }
 
+void shell(Edge **a, int l, int r)
+{
+    int i, j, k;
+
+    int incs[16] = {1391376, 463792, 198768, 86961, 33936, 13776, 4592, 1968, 861, 336, 112, 48, 21, 7, 3, 1};
+
+    for ( k = 0; k < 16; k++)
+    {
+        int h = incs[k];
+
+        for (i = l+h; i <= r; i++)
+        {
+            Edge *v = a[i];
+            j = i;
+            while (j-h >= l && less(v->wt, a[j-h]->wt))
+            {
+                exch(a[j], a[j-h]);
+                j-=h;
+            }
+            a[j] = v;
+        }
+    }
+}
 /*-----------------------------------------------*/
 
+
+int * UFinit(int V)
+{
+    int v;
+    int *parent;
+
+    parent = (int*) malloc(V * sizeof(int));
+    for(v = 0; v < V; v++) parent[v] = -1;
+
+    return parent;
+}
+
+int UFfind(int *p, int v)
+{
+    if(p[v-1] == -1)
+        return v;
+    return UFfind(p, p[v-1]);
+}
+
+void UFunion(int *p, int v, int w)
+{
+    int v_set, w_set;
+    v_set = UFfind(p, v); w_set = UFfind(p, w);
+
+    if(v_set != w_set) p[v_set-1] = w_set;
+}
+
+int UFis_cycle(int *p, int v, int w)
+{
+    return (UFfind(p, v) == UFfind(p, w));
+}
+
+
+
+
     
+/*--------------------Kruskal Alg.--------------------*/
+double Kruskal(Graph *G, Edge **mst)
+{
+    int i, k, *p;
+    double tot_wt = 0;
+    Edge **a = G->adj;
+
+    p = UFinit(G->V);
+    for(i = 0, k = 0; i < G->E && k < G->V-1; i++)
+    {
+        if(!UFis_cycle(p, a[i]->v, a[i]->w))
+        {
+            UFunion(p, a[i]->v, a[i]->w);
+            mst[k++] = a[i]; 
+            tot_wt += a[i]->wt;
+        }
+    }
+
+    return tot_wt;
+}
+/*----------------------------------------------------*/
 
 /*---------- Queue Interface ----------*/
 /* Item QueueNew(int v, double wt, link *pNext)

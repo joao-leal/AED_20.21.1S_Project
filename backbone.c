@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+
 
 #include "defs.h"
 #include "file.h"
@@ -43,6 +45,7 @@ int main(int argc, char const *argv[])
                 printf("\n");
                 BuildGraph(A_N, input);
                 
+                A1(A_N);
                 out_write result;
                 /*WriteFile(output, &result);*/
             }
@@ -124,26 +127,29 @@ void BuildGraph(Graph *G, FILE *fp)
         if(fscanf(fp, "%d %d %lf\n", &v, &w, &wt) != 3) exit(0);
 
         GRAPHinsertE(G, EDGE(v, w, wt), i);
-        printf("{%d-%d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
+        printf("{%d - %d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
     }
 
     printf("\n");
     sort(G->adj, G->E);
 
-    for(i = 0; i < G->E; i++) printf("{%d-%d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
+    for(i = 0; i < G->E; i++) printf("{%d - %d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
     printf("\n");
       
 }
 
 
-void A1()
+void A1(Graph *G)
 {
-    /* int i, *st = (int *) calloc(G->V, sizeof(int));
-    double *val = (double *) calloc(G->V, sizeof(double));
+    int i;
+    double total_wt;
+    Edge **mst = (Edge **) malloc(G->V * sizeof(Edge *));
+    for(i = 0; i < G->V; i++) mst[i] == NULL;
 
+    total_wt = Kruskal(G, mst);
 
-    for(i = 0; i < G->V; i++) printf("%d ", st[i]);
-    return 0; */
+    for(i = 0; mst[i] != NULL; i++) printf("{%d - %d : %.2lf}\n", mst[i]->v, mst[i]->w, mst[i]->wt);
+    printf("%.2lf", total_wt);
 }
 
 double B1(Graph *G, int v_i, int v_j)
@@ -173,5 +179,6 @@ void E1(){
 void sort(Edge **a, int E)
 {
     // bubble(a, 0, E-1);
-    insertion(a, 0, E-1);
+    // insertion(a, 0, E-1);
+    shell(a, 0, E-1);
 }

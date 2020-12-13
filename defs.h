@@ -13,7 +13,7 @@ void sort(Edge **, int);
 
 
 /*Returns the depth of the vertice given as input*/
-void A1();
+void A1(Graph *);
 /*Returns the route and its cost if there's one route between the two airports, otherwise returns -1*/
 double B1(); 
 

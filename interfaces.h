@@ -46,23 +46,29 @@ void Item_swap(Item *, Item *);
 Graph *GRAPHinit(int, int); 
 void GRAPHpopulate(Graph *, FILE *);
 void GRAPHinsertE(Graph *, Edge *, int);
-void GRAPHinsertValue(Graph *, int, int);
-void GRAPHinsertString(Graph *, char*, int);
 void GRAPHremoveE(Graph *, Edge *);
-int GRAPHedges(Edge **, Graph *);
-Graph *GRAPHcopy(Graph *);
-void GRAPHdestroy(Graph *);
 void FreeGraph(Graph *);
 
 /****************************************/
 
-/*----------- BFS Algorithm -------------*/
+/*----------- Algorithms -------------*/
 void bfs(Graph *, Edge *);
+double Kruskal(Graph *, Edge **);
 /*****************************************/
+
+/*--------------Union Find------------*/
+int * UFinit(int);
+int UFfind(int *, int);
+void UFunion(int *, int, int);
+int UFis_cycle(int *, int, int);
+
+/*------------------------------------*/
 
 /*----------- SORT -------------*/
 void bubble(Edge **, int, int);
 void insertion(Edge **, int, int);
+void shell(Edge**, int, int);
+
 /********************************/
 
 
