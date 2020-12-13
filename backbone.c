@@ -59,21 +59,12 @@ int main(int argc, char const *argv[])
         case 'B':
             if(mode[1] == '1')
             {
-                out_write result;
-
                 if(fscanf(input, "%d %d\n", &v_i, &v_j) != 2) exit(0);
 
-                result.V = A_N->V;
-                result.A = A_N->E;
-                result.mode = mode;
-                result.v_i = v_i;
-                result.v_j = v_j;
-                
                 BuildGraph(A_N, input);
 
-                A1(A_N, &result);
-                WriteFile(output, &result);
-                
+                B1(A_N, v_i, v_j, output);
+
             }
             break;        
 
@@ -94,6 +85,8 @@ int main(int argc, char const *argv[])
 
                 A1(A_N, &result);
                 WriteFile(output, &result);
+                free(result.mst);
+
 
             }
             break;
@@ -114,6 +107,8 @@ int main(int argc, char const *argv[])
 
                 A1(A_N, &result);
                 WriteFile(output, &result);
+                free(result.mst);
+
 
             }
             break;
@@ -132,6 +127,8 @@ int main(int argc, char const *argv[])
 
                 A1(A_N, &result);
                 WriteFile(output, &result);
+                free(result.mst);
+
 
             }
             break;
@@ -151,14 +148,6 @@ int main(int argc, char const *argv[])
     
 }
 
-
-void search(Graph *G)
-{
-
-
-}
-
-
 void BuildGraph(Graph *G, FILE *fp)
 {
     int i, v, w;
@@ -169,13 +158,7 @@ void BuildGraph(Graph *G, FILE *fp)
         if(fscanf(fp, "%d %d %lf\n", &v, &w, &wt) != 3) exit(0);
 
         GRAPHinsertE(G, EDGE(v, w, wt), i);
-        // printf("{%d - %d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
     }
-
-    sort(G->adj, G->E);
-
-    // for(i = 0; i < G->E; i++) printf("{%d - %d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
-      
 }
 
 
@@ -187,33 +170,70 @@ void A1(Graph *A_N, out_write *result)
     Edge **mst = (Edge **) malloc((A_N->V-1) * sizeof(Edge *));
     for(i = 0; i < A_N->V-1; i++) mst[i] = NULL;
 
+    sort(A_N->adj, A_N->E);
+    // for(i = 0; i < G->E; i++) printf("{%d - %d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
+
     exP = Kruskal(A_N, mst);
     E = (int) exP[0]; tot_wt = exP[1];
 
     shell(mst, 0, E-1, less_v);
 
-   /*  for(i = 0; i < E; i++) 
+/*     for(i = 0; i < E; i++) 
     {
         // if(mst[i] == NULL) continue;
         printf("{%d - %d : %.2lf}\n", mst[i]->v, mst[i]->w, mst[i]->wt);
-    }
-    printf("%d %.2lf\n", E, tot_wt);
- */
+    } */
+
     free(exP);
+    
 
     result->E = E;
     result->tot_cst = tot_wt;
     result->mst = mst;
 }
 
-double B1(Graph *A_N, int v_i, int v_j)
+void B1(Graph *A_N, int v_i, int v_j, FILE *output)
 {
- /*    int x = v_i - 1, y = v_j - 1;
+    int i;
+    Graph *cpy;
+    Edge **a, **mst;
+    out_write result;
 
-    if(v_i > v_j && G->adj[x][y] >= 0.0) return G->adj[x][y];
-    else if(G->adj[y][x] >= 0.0) return G->adj[y][x];
-    else return -1;  */
-    return 0;
+    result.V = A_N->V;
+    result.A = A_N->E;
+    result.mode = "B1";
+    result.v_i = v_i;
+    result.v_j = v_j;
+                
+    mst = (Edge **) malloc((A_N->V-1) * sizeof(Edge *));
+    for(i = 0; i < A_N->V-1; i++) mst[i] = NULL;
+
+    cpy = GRAPHinit(A_N->V, A_N->E);
+    GRAPHcopy(A_N, cpy);
+    a = cpy->adj;
+    
+    
+    A1(cpy, &result);
+
+    for(i = 0; i < result.E && ((result.mst[i]->v != v_i) || (result.mst[i]->w != v_j)); i++);
+    
+    if(i == result.E) result.res = 0;
+    else
+    {
+        exch(a[i], a[A_N->E-1]);    
+        /*swaps the edge for removal with the last in the edges' vector*/
+        a[cpy->E-1] = NULL; /*removes the content but leaves the space allocced*/
+        result.res = 1;
+
+    }
+
+    WriteFile(output, &result);
+
+    FreeGraph(cpy);
+    free(mst);
+    free(result.mst);
+    return;
+    
 }
 
 void C1(){

@@ -16,9 +16,10 @@ typedef struct _out_write
     char *mode;
     int v_i;
     int v_j;
-    Edge **mst;
     int E;
+    int res;
     double tot_cst;
+    Edge **mst;
     Edge *alt_edge;
     Edge **mst_alt;
 } out_write;

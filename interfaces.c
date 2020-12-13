@@ -26,7 +26,7 @@ Graph *GRAPHinit(int V, int A)
 
     G->V = V; G->E = A; 
     G->adj = (Edge **) malloc(G->E * sizeof(struct edge *)); 
-    for(v = 0; v < V; v++) G->adj[v] = NULL;
+    for(v = 0; v < A; v++) G->adj[v] = NULL;
     if(G->adj == NULL) exit(0);
     
     return G;
@@ -36,6 +36,25 @@ void GRAPHinsertE(Graph *G, Edge *e, int i)
 {
     G->adj[i] = e;
 }
+
+void GRAPHcopy(Graph *a, Graph *b)
+{
+    int i;
+    Edge **e1, **e2;
+
+    e1 = a->adj; e2 = b->adj;
+
+    b->V = a->V; b->E = a->E;
+
+    for(i = 0; i < a->E; i++)
+    {
+        e2[i] = (Edge*) malloc(sizeof(Edge));
+        e2[i]->v = e1[i]->v;
+        e2[i]->w = e1[i]->w;
+        e2[i]->wt = e1[i]->wt;
+    }
+}
+
 
 void FreeGraph(Graph *G)
 {
@@ -96,8 +115,8 @@ int less_v(Edge *a, Edge *b)
 
 void sort(Edge **a, int E)
 {
-    // bubble(a, 0, E-1);
-    // insertion(a, 0, E-1);
+    /* bubble(a, 0, E-1);
+    insertion(a, 0, E-1); */
     shell(a, 0, E-1, less_wt);
 }
 
