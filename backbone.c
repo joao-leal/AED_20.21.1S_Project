@@ -33,7 +33,7 @@ int main(int argc, char const *argv[])
         Apts = Rts = v_i = v_j = 0;
 
         if(fscanf(input, "%d %d %s", &Apts, &Rts, mode) != 3) exit(0);/*Reads the 3 first args from the header*/
-        fprintf(stdout, "%d %d %s ", Apts, Rts, mode);
+        // fprintf(stdout, "%d %d %s ", Apts, Rts, mode);
 
         A_N = GRAPHinit(Apts, Rts);
 
@@ -42,25 +42,37 @@ int main(int argc, char const *argv[])
         case 'A':
             if(mode[1] == '1')
             {
-                printf("\n");
+                out_write result;
+
+                result.V = A_N->V;
+                result.A = A_N->E;
+                result.mode = mode;
                 BuildGraph(A_N, input);
                 
-                A1(A_N);
-                out_write result;
-                /*WriteFile(output, &result);*/
+                A1(A_N, &result);
+                WriteFile(output, &result);
+                free(result.mst);
+
             }
             break;
 
         case 'B':
             if(mode[1] == '1')
             {
+                out_write result;
+
                 if(fscanf(input, "%d %d\n", &v_i, &v_j) != 2) exit(0);
-                fprintf(stdout, "%d %d\n", v_i, v_j);
+
+                result.V = A_N->V;
+                result.A = A_N->E;
+                result.mode = mode;
+                result.v_i = v_i;
+                result.v_j = v_j;
                 
                 BuildGraph(A_N, input);
 
-                out_write result;
-                /*WriteFile(output, &result);*/
+                A1(A_N, &result);
+                WriteFile(output, &result);
                 
             }
             break;        
@@ -68,9 +80,20 @@ int main(int argc, char const *argv[])
         case 'C':
             if(mode[1] == '1')
             {
+                out_write result;
+
                 if(fscanf(input, "%d %d\n", &v_i, &v_j) != 2) exit(0);
-                fprintf(stdout, "%d %d\n", v_i, v_j);
+
+                result.V = A_N->V;
+                result.A = A_N->E;
+                result.mode = mode;
+                result.v_i = v_i;
+                result.v_j = v_j;
+
                 BuildGraph(A_N, input);
+
+                A1(A_N, &result);
+                WriteFile(output, &result);
 
             }
             break;
@@ -78,9 +101,19 @@ int main(int argc, char const *argv[])
         case 'D':
             if(mode[1] == '1')
             {
+                out_write result;
+
                 if(fscanf(input, "%d\n", &v_i) != 1) exit(0);
-                fprintf(stdout, "%d\n", v_i);
+
+                result.V = A_N->V;
+                result.A = A_N->E;
+                result.mode = mode;
+                result.v_i = v_i;
+
                 BuildGraph(A_N, input);
+
+                A1(A_N, &result);
+                WriteFile(output, &result);
 
             }
             break;
@@ -88,9 +121,18 @@ int main(int argc, char const *argv[])
         case 'E':
             if(mode[1] == '1')
             {
-                printf("\n");
+                out_write result;
+
+
+                result.V = A_N->V;
+                result.A = A_N->E;
+                result.mode = mode;
+
                 BuildGraph(A_N, input);
-                
+
+                A1(A_N, &result);
+                WriteFile(output, &result);
+
             }
             break;
 
@@ -103,7 +145,7 @@ int main(int argc, char const *argv[])
     FreeGraph(A_N);
     fclose(input);
     fclose(output);
-    printf("Ta");
+    // printf("Ta\n");
 
     return 0;
     
@@ -127,32 +169,44 @@ void BuildGraph(Graph *G, FILE *fp)
         if(fscanf(fp, "%d %d %lf\n", &v, &w, &wt) != 3) exit(0);
 
         GRAPHinsertE(G, EDGE(v, w, wt), i);
-        printf("{%d - %d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
+        // printf("{%d - %d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
     }
 
-    printf("\n");
     sort(G->adj, G->E);
 
-    for(i = 0; i < G->E; i++) printf("{%d - %d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
-    printf("\n");
+    // for(i = 0; i < G->E; i++) printf("{%d - %d : %.2lf}\n", G->adj[i]->v, G->adj[i]->w, G->adj[i]->wt);
       
 }
 
 
-void A1(Graph *G)
+void A1(Graph *A_N, out_write *result)
 {
-    int i;
-    double total_wt;
-    Edge **mst = (Edge **) malloc(G->V * sizeof(Edge *));
-    for(i = 0; i < G->V; i++) mst[i] == NULL;
+    int i, E;
+    double *exP, tot_wt; /*Exit parameters, total cost and the number of edges*/
 
-    total_wt = Kruskal(G, mst);
+    Edge **mst = (Edge **) malloc((A_N->V-1) * sizeof(Edge *));
+    for(i = 0; i < A_N->V-1; i++) mst[i] = NULL;
 
-    for(i = 0; mst[i] != NULL; i++) printf("{%d - %d : %.2lf}\n", mst[i]->v, mst[i]->w, mst[i]->wt);
-    printf("%.2lf", total_wt);
+    exP = Kruskal(A_N, mst);
+    E = (int) exP[0]; tot_wt = exP[1];
+
+    shell(mst, 0, E-1, less_v);
+
+   /*  for(i = 0; i < E; i++) 
+    {
+        // if(mst[i] == NULL) continue;
+        printf("{%d - %d : %.2lf}\n", mst[i]->v, mst[i]->w, mst[i]->wt);
+    }
+    printf("%d %.2lf\n", E, tot_wt);
+ */
+    free(exP);
+
+    result->E = E;
+    result->tot_cst = tot_wt;
+    result->mst = mst;
 }
 
-double B1(Graph *G, int v_i, int v_j)
+double B1(Graph *A_N, int v_i, int v_j)
 {
  /*    int x = v_i - 1, y = v_j - 1;
 
@@ -175,10 +229,3 @@ void E1(){
 }
 
 
-
-void sort(Edge **a, int E)
-{
-    // bubble(a, 0, E-1);
-    // insertion(a, 0, E-1);
-    shell(a, 0, E-1);
-}

@@ -1,6 +1,8 @@
 #ifndef _FIRD_H_
 #define _FIRD_H_
 
+#include "interfaces.h"
+
 typedef struct _i_o_name
 {
     char *i_name;
@@ -14,14 +16,17 @@ typedef struct _out_write
     char *mode;
     int v_i;
     int v_j;
-    int result;
-    double weight;
+    Edge **mst;
+    int E;
+    double tot_cst;
+    Edge *alt_edge;
+    Edge **mst_alt;
 } out_write;
 
 
 i_o_name *CheckCall(int, char const *);
 char *OutputFile(char *);
-void WriteFile(FILE *fp, out_write *result);
+void WriteFile(FILE *, out_write *);
 
 
 #endif

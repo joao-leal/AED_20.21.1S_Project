@@ -3,7 +3,7 @@
 
 
 #include "interfaces.h"
-
+#include "file.h"
 
 
 
@@ -13,7 +13,7 @@ void sort(Edge **, int);
 
 
 /*Returns the depth of the vertice given as input*/
-void A1(Graph *);
+void A1(Graph *, out_write *);
 /*Returns the route and its cost if there's one route between the two airports, otherwise returns -1*/
 double B1(); 
 

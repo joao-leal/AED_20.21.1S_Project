@@ -44,8 +44,6 @@ i_o_name *CheckCall(int argc, char const *arg){
     strncpy(path, arg, alen-slen);
     path[alen-slen] = '\0';
 
-    printf("%s\n", path);
-
     fnames->o_name = (output = OutputFile(path)); 
 
     free(sufix);
@@ -71,17 +69,21 @@ char *OutputFile(char *path)
 
 void WriteFile(FILE *fp, out_write *result)
 {
-    /*mode B0 has route*/
-    if(result->result == 0)
+    int i;
+    Edge **mst = result->mst;
+
+    switch (result->mode[0])
     {
-        if(result->weight > 0) fprintf(fp, "%d %d %s %d %d %.2lf\n\n", result->V, result->A, result->mode, result->v_i, result->v_j, result->weight);
-        else fprintf(fp, "%d %d %s %d %d -1\n\n", result->V, result->A, result->mode, result->v_i, result->v_j);
-    } 
-    else if(result->result == -1)
-    {
-        fprintf(fp, "%d %d %s -1\n\n", result->V, result->A, result->mode);
-    } 
-    else fprintf(fp, "%d %d %s %d %d\n\n", result->V, result->A, result->mode, result->v_i, result->result);
+    case 'A':
+
+        fprintf(fp, "%d %d %s %d %.2lf\n", result->V, result->A, result->mode, result->E, result->tot_cst);
+        for(i = 0; i < result->E; i++) fprintf(fp, "%d %d %.2lf\n", mst[i]->v, mst[i]->w, mst[i]->wt);
+        fprintf(fp, "\n");
+        break;
+    
+    default:
+        break;
+    }
 
     return;
 }

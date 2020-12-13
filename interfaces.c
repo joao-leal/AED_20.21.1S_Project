@@ -17,25 +17,6 @@ Edge *EDGE(int v, int w, double wt)
 }
 
 
-/*---------- link Interface ----------*/
-link *NEW(link *ptr, int v, double wt)
-{
-    link *t = (link *) malloc(sizeof(link));
-
-    t->v = v;
-    t->wt = wt;
-    t->next = ptr;
-
-    return t;
-}
-
-link *LISTNext(link *ptr)
-{
-    return ptr->next;
-}
-/*-----------------------------------*/
-
-
  /*---------------- Graph Interface ----------------*/
 Graph *GRAPHinit(int V, int A)
 {
@@ -67,7 +48,6 @@ void FreeGraph(Graph *G)
     free(G->adj);
     free(G);
 }
-
 /*------------------------------------------------*/
 
 
@@ -98,7 +78,30 @@ void insertion(Edge **a, int l, int r)
     }
 }
 
-void shell(Edge **a, int l, int r)
+int less_wt(Edge *a, Edge *b)
+{
+    return less(a->wt, b->wt);
+}
+
+int less_w(Edge *a, Edge *b)
+{
+    return less(a->w, b->w);
+}
+
+int less_v(Edge *a, Edge *b)
+{   
+   if(a->v == b->v) return less_w(a, b);
+   else return less(a->v, b->v);
+}
+
+void sort(Edge **a, int E)
+{
+    // bubble(a, 0, E-1);
+    // insertion(a, 0, E-1);
+    shell(a, 0, E-1, less_wt);
+}
+
+void shell(Edge **a, int l, int r, int(*less_)() )
 {
     int i, j, k;
 
@@ -112,7 +115,7 @@ void shell(Edge **a, int l, int r)
         {
             Edge *v = a[i];
             j = i;
-            while (j-h >= l && less(v->wt, a[j-h]->wt))
+            while (j-h >= l && less_(v, a[j-h]))
             {
                 exch(a[j], a[j-h]);
                 j-=h;
@@ -123,6 +126,9 @@ void shell(Edge **a, int l, int r)
 }
 /*-----------------------------------------------*/
 
+
+
+/*--------------Union Find------------*/
 
 int * UFinit(int V)
 {
@@ -155,15 +161,18 @@ int UFis_cycle(int *p, int v, int w)
     return (UFfind(p, v) == UFfind(p, w));
 }
 
+/*------------------------------------*/
 
 
 
     
 /*--------------------Kruskal Alg.--------------------*/
-double Kruskal(Graph *G, Edge **mst)
+double *Kruskal(Graph *G, Edge **mst)
 {
     int i, k, *p;
-    double tot_wt = 0;
+    double *wt_E;
+    
+    wt_E = (double*) calloc(2, sizeof(double)); 
     Edge **a = G->adj;
 
     p = UFinit(G->V);
@@ -173,13 +182,21 @@ double Kruskal(Graph *G, Edge **mst)
         {
             UFunion(p, a[i]->v, a[i]->w);
             mst[k++] = a[i]; 
-            tot_wt += a[i]->wt;
+            wt_E[1] += a[i]->wt;    /*counter for cost*/
+            wt_E[0]++;              /*counter for mst's edges*/             
         }
     }
 
-    return tot_wt;
+    free(p);
+    return wt_E;
 }
 /*----------------------------------------------------*/
+
+
+/*-------------CLEAN UP------------*/
+
+/*---------------------------------*/
+
 
 /*---------- Queue Interface ----------*/
 /* Item QueueNew(int v, double wt, link *pNext)

@@ -12,7 +12,7 @@ OBJECTS_A = backbone.o interfaces.o file.o
 
 
 .c.o:
-	$(CC) $(CFLAGS1) -c -o $@ $<
+	$(CC) $(CFLAGS2) -c -o $@ $<
 
 backbone: $(OBJECTS_A)
 	$(CC) $(CFLAGS1) -o $@ $(OBJECTS_A)
@@ -30,10 +30,10 @@ OUTPUT = $(shell ls ./primeiro/*.wordz)
 TEST = $(shell ls ./primeiro/*.wordz)
 
 all:
-	for F in testes/Enunciado/*B0*.routes0; do ./backbone $${F} ; done;
+	for F in testes/15_A1/*.routes; do ./backbone $${F} ; done;
 
 diff:
-	for F in testes/Enunciado/*B0*.queries; do diff $$F $${F}0; done;
+	for F in testes/15_A1/*.bbones; do diff $$F $${F}0; done;
 # prim:
 # 	for F in Testes/primeiro*.graph0; do ./wordz Testes/curto.dict $${F} ; done;
 

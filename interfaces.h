@@ -39,57 +39,45 @@ typedef struct queue
 } Q;
 
 Edge *EDGE(int, int, double);
-void Item_swap(Item *, Item *);
 
 
-/*---------- Graph Interface --------- */
+/*---------- Graph Interface --------*/
 Graph *GRAPHinit(int, int); 
 void GRAPHpopulate(Graph *, FILE *);
 void GRAPHinsertE(Graph *, Edge *, int);
 void GRAPHremoveE(Graph *, Edge *);
 void FreeGraph(Graph *);
 
-/****************************************/
+/*----------------------------------*/
 
-/*----------- Algorithms -------------*/
-void bfs(Graph *, Edge *);
-double Kruskal(Graph *, Edge **);
-/*****************************************/
 
-/*--------------Union Find------------*/
+/*--------------- SORT -------------*/
+void bubble(Edge **, int, int);
+void insertion(Edge **, int, int);
+int less_v(Edge *, Edge *);
+int less_w(Edge *, Edge *);
+int less_wt(Edge * , Edge *);
+void sort(Edge **, int);
+void shell(Edge**, int, int, int());
+/*----------------------------------*/
+
+
+/*--------------Union Find----------*/
 int * UFinit(int);
 int UFfind(int *, int);
 void UFunion(int *, int, int);
 int UFis_cycle(int *, int, int);
-
-/*------------------------------------*/
-
-/*----------- SORT -------------*/
-void bubble(Edge **, int, int);
-void insertion(Edge **, int, int);
-void shell(Edge**, int, int);
-
-/********************************/
+/*----------------------------------*/
 
 
-
-/*-----------  link Interface -----------*/
-link *NEW(link *, int, double);
-void LISTFreeEl(link *);
-void LISTDelNext(link *);
-link *LISTNext(link *);
-Item LISTGetEl(link *);
-/***************************************/
+/*----------- Algorithms -----------*/
+void bfs(Graph *, Edge *);
+double *Kruskal(Graph *, Edge **);
+/*----------------------------------*/
 
 
+/*--------- CLEAN UP --------------*/
+/*---------------------------------*/
 
-/*---------- Queue Interface ----------*/
-void QueueDump(Q *);
-Q *QueueInit(int);
-int QueueEmpty(Q*);
-void QueuePut(Q*, Item);
-Item QueueGet(Q*);
-Item QueueNew(Item, link*);
-/*-------------------------------------*/
 
 #endif
