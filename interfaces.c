@@ -53,6 +53,7 @@ void GRAPHcopy(Graph *a, Graph *b)
         e2[i]->w = e1[i]->w;
         e2[i]->wt = e1[i]->wt;
     }
+    
 }
 
 
@@ -62,10 +63,12 @@ void FreeGraph(Graph *G)
 
     for(i = 0; i < G->E; i++)
     {
-        free(G->adj[i]);
+        if(G->adj[i] != NULL) free(G->adj[i]);
+        printf("free\n");
     }
     free(G->adj);
     free(G);
+    printf("\n");
 }
 /*------------------------------------------------*/
 
@@ -146,7 +149,7 @@ void shell(Edge **a, int l, int r, int(*less_)() )
 /*-----------------------------------------------*/
 
 
-
+ 
 /*--------------Union Find------------*/
 
 int * UFinit(int V)
@@ -191,7 +194,8 @@ double *Kruskal(Graph *G, Edge **mst)
     int i, k, *p;
     double *wt_E;
     
-    wt_E = (double*) calloc(2, sizeof(double)); 
+    wt_E = (double*) malloc(2 * sizeof(double)); 
+    wt_E[0] = 0.0; wt_E[1] = 0.0;
     Edge **a = G->adj;
 
     p = UFinit(G->V);
@@ -205,7 +209,6 @@ double *Kruskal(Graph *G, Edge **mst)
             wt_E[0]++;              /*counter for mst's edges*/             
         }
     }
-
     free(p);
     return wt_E;
 }

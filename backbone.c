@@ -60,11 +60,40 @@ int main(int argc, char const *argv[])
             if(mode[1] == '1')
             {
                 if(fscanf(input, "%d %d\n", &v_i, &v_j) != 2) exit(0);
+                int i;
+                Graph *copy = NULL;
+                Edge *f;
+                out_write result;
 
                 BuildGraph(A_N, input);
+                copy = GRAPHinit(A_N->V, A_N->E);
+                GRAPHcopy(A_N, copy);
 
-                B1(A_N, v_i, v_j, output);
+                result.V = A_N->V;
+                result.A = A_N->E;
+                result.mode = "B1";
+                (v_i > v_j) ? (result.v_i = v_j, result.v_j = v_i) : (result.v_i = v_i, result.v_j = v_j);
 
+                A1(A_N, &result);
+                f = B1(copy, result.mst, &result, v_i, v_j, output);
+
+                fprintf(stdout, "%d %d %s %d %d %d %.2lf %d\n", result.V, result.A,
+                result.mode, result.v_i, result.v_j, result.E, result.tot_cst, result.res);
+
+                if(result.res == 0)
+                {
+                    for(i = 0; i < result.E; i++) fprintf(stdout, "%d %d %.2lf\n", result.mst[i]->v, result.mst[i]->w, result.mst[i]->wt);
+                }
+                else
+                {
+                    for(i = 0; i < result.E; i++) fprintf(stdout, "%d %d %.2lf\n", result.mst[i]->v, result.mst[i]->w, result.mst[i]->wt);
+                    fprintf(stdout, "%d %d %.2lf\n", f->v, f->w, f->wt);
+
+                }
+                fprintf(stdout, "\n");
+
+                FreeGraph(copy);
+                free(result.mst);
             }
             break;        
 
@@ -192,48 +221,56 @@ void A1(Graph *A_N, out_write *result)
     result->mst = mst;
 }
 
-void B1(Graph *A_N, int v_i, int v_j, FILE *output)
+Edge *B1(Graph *G, Edge **mst, out_write *result, int v_i, int v_j, FILE *output)
 {
-    int i;
-    Graph *cpy;
-    Edge **a, **mst;
-    out_write result;
+    int i, p, E = result->E;
+    Edge **a = G->adj, **alt_mst, *alt;
+    double *exP;
 
-    result.V = A_N->V;
-    result.A = A_N->E;
-    result.mode = "B1";
-    result.v_i = v_i;
-    result.v_j = v_j;
-                
-    mst = (Edge **) malloc((A_N->V-1) * sizeof(Edge *));
-    for(i = 0; i < A_N->V-1; i++) mst[i] = NULL;
-
-    cpy = GRAPHinit(A_N->V, A_N->E);
-    GRAPHcopy(A_N, cpy);
-    a = cpy->adj;
+    alt_mst = (Edge**) malloc(E * sizeof(Edge*));
+    for(i = 0, p = 0; i < E; i++)
+    {
+        if(mst[i]->v != v_i && mst[i]->w != v_j)
+        {
+            alt_mst[p] = (Edge*) malloc(E * sizeof(Edge));
+            alt_mst[p]->v = mst[i]->v;
+            alt_mst[p]->w = mst[i]->w;
+            alt_mst[p++]->wt = mst[i]->wt;    
+        }
+    }
+    // memcpy(mst, result.mst, result.E * sizeof(Edge*));
+    /* FreeGraph(cpy);   
+    result.mst = mst;  */
     
-    
-    A1(cpy, &result);
-
-    for(i = 0; i < result.E && ((result.mst[i]->v != v_i) || (result.mst[i]->w != v_j)); i++);
-    
-    if(i == result.E) result.res = 0;
+    if(p == E-1)
+    {
+        result->res = 0;
+        for(i = 0; i < p; i++) free(alt_mst[i]);
+        free(alt_mst);
+        return NULL;
+    } 
     else
     {
-        exch(a[i], a[A_N->E-1]);    
-        /*swaps the edge for removal with the last in the edges' vector*/
-        a[cpy->E-1] = NULL; /*removes the content but leaves the space allocced*/
-        result.res = 1;
 
+        for(i = 0; i < G->E && (a[i]->v != v_i || a[i]->w != v_j); i++);
+        // printf("\n{(%d %d) %d / %d - %d : %.2lf}\n\n", v_i, v_j, i, a[i]->v, a[i]->w, a[i]->wt);
+        for(; i < G->E-1; i++) exch(a[i-1], a[i]);
+        /*leads the edge for removal to the last position of the edges' vector*/
+        a[G->E-1] = NULL;
+        G->E--;
+        // for(i = 0; i < copy->E; i++) printf("{%d - %d : %.2lf}\n", a[i]->v, a[i]->w, a[i]->wt);
+       
+        exP = Kruskal(G, alt_mst);
+        if(result->E > exP[0]) result->res = -1;
+        else result->res = 1;
+        result->E = (int) exP[0];
+        free(exP);
+        alt = alt_mst[result->E-1];
+        for(i = 0; i < p; i++) free(alt_mst[i]);
+        free(alt_mst);
+
+        return alt;
     }
-
-    WriteFile(output, &result);
-
-    FreeGraph(cpy);
-    free(mst);
-    free(result.mst);
-    return;
-    
 }
 
 void C1(){
