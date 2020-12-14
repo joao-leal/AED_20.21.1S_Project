@@ -79,6 +79,7 @@ void WriteFile(FILE *fp, out_write *result)
         fprintf(fp, "%d %d %s %d %.2lf\n", result->V, result->A, result->mode, result->E, result->tot_cst);
         for(i = 0; i < result->E; i++) fprintf(fp, "%d %d %.2lf\n", mst[i]->v, mst[i]->w, mst[i]->wt);
         fprintf(fp, "\n");
+
         break;
     
     case 'B':

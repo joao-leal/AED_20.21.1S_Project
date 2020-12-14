@@ -47,7 +47,7 @@ void GRAPHpopulate(Graph *, FILE *);
 void GRAPHinsertE(Graph *, Edge *, int);
 void GRAPHremoveE(Graph *, Edge *);
 void GRAPHcopy(Graph*, Graph *);
-void FreeGraph(Graph *);
+void FreeGraph(Graph *, int);
 
 /*----------------------------------*/
 

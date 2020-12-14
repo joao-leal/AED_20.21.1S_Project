@@ -12,10 +12,10 @@ OBJECTS_A = backbone.o interfaces.o file.o
 
 
 .c.o:
-	$(CC) $(CFLAGS1) -c -o $@ $<
+	$(CC) $(CFLAGS2) -c -o $@ $<
 
 backbone: $(OBJECTS_A)
-	$(CC) $(CFLAGS1) -o $@ $(OBJECTS_A)
+	$(CC) $(CFLAGS2) -o $@ $(OBJECTS_A)
 	
 backbone.o: backbone.c defs.h interfaces.h file.h
 

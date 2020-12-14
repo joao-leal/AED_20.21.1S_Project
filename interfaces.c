@@ -40,35 +40,29 @@ void GRAPHinsertE(Graph *G, Edge *e, int i)
 void GRAPHcopy(Graph *a, Graph *b)
 {
     int i;
-    Edge **e1, **e2;
-
-    e1 = a->adj; e2 = b->adj;
 
     b->V = a->V; b->E = a->E;
 
     for(i = 0; i < a->E; i++)
     {
-        e2[i] = (Edge*) malloc(sizeof(Edge));
-        e2[i]->v = e1[i]->v;
-        e2[i]->w = e1[i]->w;
-        e2[i]->wt = e1[i]->wt;
+        b->adj[i] = (Edge*) malloc(sizeof(Edge));
+        (b->adj[i])->v = (a->adj[i])->v;
+        (b->adj[i])->w = (a->adj[i])->w;
+        (b->adj[i])->wt = (a->adj[i])->wt;
     }
     
 }
 
-
-void FreeGraph(Graph *G)
+void FreeGraph(Graph *G, int E)
 {
     int i;
 
-    for(i = 0; i < G->E; i++)
+    for(i = 0; i < E; i++)
     {
         if(G->adj[i] != NULL) free(G->adj[i]);
-        printf("free\n");
     }
     free(G->adj);
     free(G);
-    printf("\n");
 }
 /*------------------------------------------------*/
 
@@ -204,6 +198,7 @@ double *Kruskal(Graph *G, Edge **mst)
         if(!UFis_cycle(p, a[i]->v, a[i]->w))
         {
             UFunion(p, a[i]->v, a[i]->w);
+            free(mst[k]);
             mst[k++] = a[i]; 
             wt_E[1] += a[i]->wt;    /*counter for cost*/
             wt_E[0]++;              /*counter for mst's edges*/             
